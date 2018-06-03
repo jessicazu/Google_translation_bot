@@ -30,9 +30,7 @@ class LinebotController < ApplicationController
         case event.type
         when Line::Bot::Event::MessageType::Text
           text = event.message['text']
-          p text
           translated_text = translate(text)
-          p translated_text
           message = {
             type: 'text',
             text: translated_text
@@ -51,10 +49,9 @@ class LinebotController < ApplicationController
       q: text,
       target: "en",
       source: "ja",
-      key: ['GOOGLE_TRANSLATE_API_KEY']
+      key: ENV['GOOGLE_TRANSLATE_API_KEY']
     }
-    url.query = URI.encode_www_form(params)
-    res = Net::HTTP.get_response(url)
+    res = Net::HTTP.post_form(url, params)
     JSON.parse(res.body)["data"]["translations"].first["translatedText"]
   end
 end
