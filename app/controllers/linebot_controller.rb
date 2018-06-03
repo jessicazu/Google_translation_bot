@@ -30,7 +30,9 @@ class LinebotController < ApplicationController
         case event.type
         when Line::Bot::Event::MessageType::Text
           text = event.message['text']
+          p text
           translated_text = translate(text)
+          p translated_text
           message = {
             type: 'text',
             text: translated_text
