@@ -60,6 +60,7 @@ GEM
     ffi (1.9.24)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
+    htmlentities (4.3.4)
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
     jbuilder (2.7.0)
@@ -167,6 +168,7 @@ DEPENDENCIES
   byebug
   coffee-rails (~> 4.2)
   dotenv-rails
+  htmlentities
   jbuilder (~> 2.5)
   jquery-rails
   line-bot-api
