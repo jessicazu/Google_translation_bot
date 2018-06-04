@@ -3,6 +3,7 @@ class LinebotController < ApplicationController
   require 'net/http'
   require 'uri'
   require 'json'
+  require 'htmlentities'
 
   # callbackアクションのCSRFトークン認証を無効
   protect_from_forgery :except => [:callback]
@@ -52,6 +53,7 @@ class LinebotController < ApplicationController
       key: ENV['GOOGLE_TRANSLATE_API_KEY']
     }
     res = Net::HTTP.post_form(url, params)
-    JSON.parse(res.body)["data"]["translations"].first["translatedText"]
+    ans = JSON.parse(res.body)["data"]["translations"].first["translatedText"]
+    HTMLEntities.new.decode(ans)
   end
 end
