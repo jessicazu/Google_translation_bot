@@ -45,15 +45,31 @@ class LinebotController < ApplicationController
   end
 
   def translate(text)
-    url = URI.parse('https://www.googleapis.com/language/translate/v2')
+    detect_url = URI.parse('https://translation.googleapis.com/language/translate/v2/detect')
     params = {
       q: text,
-      target: "en",
-      source: "ja",
-      key: ENV['GOOGLE_TRANSLATE_API_KEY']
+      key: "AIzaSyC4cdgNESXrk7hlXxWlqUgtqykFh290J4g"
     }
-    res = Net::HTTP.post_form(url, params)
-    ans = JSON.parse(res.body)["data"]["translations"].first["translatedText"]
-    HTMLEntities.new.decode(ans)
+    detected_res = Net::HTTP.post_form(detect_url, params)
+    detected_lang = JSON.parse(detected_res.body)["data"]["detections"].first.first["language"]
+
+    case detected_lang
+    when "ja"
+      target_lang = "en"
+    else
+      target_lang = "ja"
+    end
+
+    translate_url = URI.parse('https://www.googleapis.com/language/translate/v2')
+    params = {
+      q: text,
+      target: target_lang,
+      source: detected_lang,
+      key: "AIzaSyC4cdgNESXrk7hlXxWlqUgtqykFh290J4g"
+    }
+    # url.query = URI.encode_www_form(params)
+    translated_res = Net::HTTP.post_form(translate_url, params)
+    translated_text = JSON.parse(translated_res.body)["data"]["translations"].first["translatedText"]
+    HTMLEntities.new.decode(translated_text)
   end
 end
