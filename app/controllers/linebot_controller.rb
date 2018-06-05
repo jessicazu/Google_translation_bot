@@ -48,7 +48,7 @@ class LinebotController < ApplicationController
     detect_url = URI.parse('https://translation.googleapis.com/language/translate/v2/detect')
     params = {
       q: text,
-      key: "AIzaSyC4cdgNESXrk7hlXxWlqUgtqykFh290J4g"
+      key: ENV['GOOGLE_TRANSLATE_API_KEY']
     }
     detected_res = Net::HTTP.post_form(detect_url, params)
     detected_lang = JSON.parse(detected_res.body)["data"]["detections"].first.first["language"]
@@ -65,7 +65,7 @@ class LinebotController < ApplicationController
       q: text,
       target: target_lang,
       source: detected_lang,
-      key: "AIzaSyC4cdgNESXrk7hlXxWlqUgtqykFh290J4g"
+      key: ENV['GOOGLE_TRANSLATE_API_KEY']
     }
     # url.query = URI.encode_www_form(params)
     translated_res = Net::HTTP.post_form(translate_url, params)
